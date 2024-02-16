@@ -2,6 +2,7 @@ from collections import Counter
 from multiprocessing import Pool
 import csv
 import sys
+import os.path
 
 # Define the map function
 def map_passenger_flights(record):
@@ -36,6 +37,17 @@ def main():
     try:
         # Prompt the user to enter the file path
         file_path = input("Enter the file path for passenger flights data: ")
+
+        # Validate the file path
+        if not file_path.strip():
+            print("Error: File path cannot be empty.")
+            sys.exit(1)
+        if not os.path.exists(file_path):
+            print("Error: File not found.")
+            sys.exit(1)
+        if not os.path.isfile(file_path):
+            print("Error: Invalid file path. Please provide a valid file path.")
+            sys.exit(1)
 
         # Load and preprocess passenger flights data
         passenger_flights_data = preprocess_passenger_flights_data(file_path)
