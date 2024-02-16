@@ -24,8 +24,11 @@ def preprocess_passenger_flights_data(file_path):
 
 # Main function to execute MapReduce
 def main():
+    # Prompt the user to enter the file path
+    file_path = input("Enter the file path for passenger flights data: ")
+
     # Load and preprocess passenger flights data
-    passenger_flights_data = preprocess_passenger_flights_data("AComp_Passenger_data_no_error.csv")
+    passenger_flights_data = preprocess_passenger_flights_data(file_path)
 
     # Map phase
     with Pool() as pool:
