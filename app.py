@@ -2,7 +2,7 @@ from collections import Counter
 from multiprocessing import Pool
 import csv
 import sys
-import os.path
+import os.path  
 
 # Define the map function
 def map_passenger_flights(record):
@@ -13,13 +13,19 @@ def map_passenger_flights(record):
 def reduce_passenger_flights(counts1, counts2):
     return counts1 + counts2
 
+# Define the shuffle function
+def shuffle(mapped_data):
+    counts = Counter()
+    for passenger_id, count in mapped_data:
+        counts[passenger_id] += count
+    return counts.items()
+
 # Load and preprocess passenger flights data
 def preprocess_passenger_flights_data(file_path):
     data = []
     try:
         with open(file_path, 'r') as file:
             csv_reader = csv.reader(file)
-            next(csv_reader)  # Skip the header if present
             for row in csv_reader:
                 if len(row) >= 1:  # Check if the row has at least one element
                     passenger_id = row[0]
@@ -60,9 +66,12 @@ def main():
         with Pool() as pool:
             mapped_data = pool.map(map_passenger_flights, passenger_flights_data)
 
+        # Shuffle phase
+        shuffled_data = shuffle(mapped_data)
+
         # Reduce phase
         counts = Counter()
-        for passenger_id, count in mapped_data:
+        for passenger_id, count in shuffled_data:
             counts[passenger_id] += count
 
         # Find passenger(s) with the highest number of flights
