@@ -4,23 +4,24 @@ import csv
 import sys
 import os.path  
 
-# Define the map function
+# Define the map function - maps passenger flight records to passenger IDs.
 def map_passenger_flights(record):
     passenger_id, _ = record
     return (passenger_id, 1)
 
-# Define the reduce function
+# Define the reduce function - reduces counts of passenger flights by summing them.
 def reduce_passenger_flights(counts1, counts2):
     return counts1 + counts2
-
-# Define the shuffle function
+ 
+# Define the shuffle function - organizes mapped data by passenger ID and counts.
 def shuffle(mapped_data):
     counts = Counter()
     for passenger_id, count in mapped_data:
         counts[passenger_id] += count
     return counts.items()
 
-# Load and preprocess passenger flights data
+# Load and preprocess passenger flights data - reads and preprocesses passenger flights data from a CSV file.
+
 def preprocess_passenger_flights_data(file_path):
     data = []
     try:
@@ -38,7 +39,8 @@ def preprocess_passenger_flights_data(file_path):
         print(f"Error: An unexpected error occurred - {e}")
     return data
 
-# Main function to execute MapReduce
+# Main function to execute MapReduce -  prompts the user to input a file path for passenger flights data, validates the path, preprocesses the data, performs a MapReduce operation to find passengers with the highest number of flights, and prints the results.
+
 def main():
     try:
         # Prompt the user to enter the file path
@@ -83,6 +85,8 @@ def main():
         for passenger_id in passengers_with_max_flights:
             print(f"Passenger ID: {passenger_id}, Number of Flights: {max_flight_count}")
 
+
+    # Handle user keyboard interupts by terminating the program
     except KeyboardInterrupt:
         print("\nProgram terminated by user.")
         sys.exit(1)
